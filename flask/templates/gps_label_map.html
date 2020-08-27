@@ -1,0 +1,135 @@
+
+      <!DOCTYPE html>
+     <html>
+     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+        <style type="text/css">
+            body, html {width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+            #allmap{width:100%;height:90%;}
+        </style>
+             <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=fvW0NX2tvsu6VThZ8n2iAOOu06FUdxzp"></script>
+        <title>从多个点删除指定点</title>
+    </head>
+    <body>
+        <div id="allmap"></div>
+        <form method="get" action="{{ url_for('gps_label_query') }}" >
+        返回查询页
+        <button type="submit" value="">返回</button>
+        </form>
+    </body>
+    </html>
+    <script type="text/javascript">
+
+     var mapData = GetMapData(); //获取位置数据
+
+     var map = new BMap.Map("allmap"); // 创建地图实例
+     var point = new BMap.Point(mapData.lon_list[0],mapData.lat_list[0]); // 创建点坐标
+     map.centerAndZoom(point, 15); // 初始化地图，设置中心点坐标和地图级别
+     map.enableScrollWheelZoom()
+     map.addControl(new BMap.NavigationControl());
+     map.addControl(new BMap.ScaleControl());
+     map.setDefaultCursor("crosshair");
+
+     var markers = [];
+     var lng = 0
+     var lat = 0;
+     for(var i=0; i<mapData.lat_list.length; i++) {
+
+
+        lng = mapData.lon_list[i];
+        lat = mapData.lat_list[i];
+        var point = new BMap.Point(lng, lat);
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        markers.push(marker);
+
+        //更改图标
+        if (mapData.label_list_overduedays[i]>0) {
+            (function (j) {
+                setTimeout(function () {
+                    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25)
+                        , {
+                            offset: new BMap.Size(10, 25), // 指定定位位置
+                            imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
+                        });
+                    markers[j].setIcon(myIcon);
+                }, 1000);
+            })(i);
+        }
+        
+            
+        else if ((mapData.label_status_list[i]==3)||(mapData.label_status_list[i]==5)) {
+            (function (j) {
+                setTimeout(function () {
+                    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25)
+                        , {
+                            offset: new BMap.Size(10, 25), // 指定定位位置
+                            imageOffset: new BMap.Size(0, 0 - 7* 25) // 设置图片偏移
+                        });
+                    markers[j].setIcon(myIcon);
+                }, 1000);
+            })(i);
+        }
+        else if ((mapData.label_list_max_overduedays[i]>0)) {
+            (function (j) {
+                setTimeout(function () {
+                    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25)
+                        , {
+                            offset: new BMap.Size(10, 25), // 指定定位位置
+                            imageOffset: new BMap.Size(0, 0 - 9 * 25) // 设置图片偏移
+                        });
+                    markers[j].setIcon(myIcon);
+                }, 1000);
+            })(i);
+              
+        }
+
+        //var dataIndex =mapData[0];
+        var dataIndex =
+                    { "lat_list":mapData.lat_list[i], "lon_list": mapData.lon_list[i], "label_list":mapData.label_list[i],
+                        "label_list_1": mapData.label_list_1[i],
+                        "label_list_overduedays": mapData.label_list_overduedays[i],"label_list_max_overduedays":mapData.label_list_max_overduedays[i] }
+        addClickHandler(dataIndex, marker);
+        }
+
+     function addClickHandler(dataIndex, marker) {
+                marker.addEventListener("mouseover", function (e) {
+                    openInfo(dataIndex, e)
+                });
+                marker.addEventListener("mousemove", function (e) {
+                    $('.BMap_pop>img').trigger('click');
+                    // map.closeInfoWindow(infoWindow,point); //开启信息窗口
+                } );
+            }
+     function openInfo(dataIndex, e) {
+                var p = e.target;
+
+                var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+                var infoWindow = new BMap.InfoWindow(dataIndex.label_list_1, {
+                    width: 200, // 信息窗口宽度
+                    height: 100, // 信息窗口高度
+                    title: '信息描述', // 信息窗口标题
+                    enableMessage: true,//设置允许信息窗发送短息
+                    message:dataIndex.label_list_1
+
+                }); // 创建信息窗口对象
+                map.openInfoWindow(infoWindow, point); //开启信息窗口
+            }
+    function GetMapData() {
+        var dic_result=JSON.parse('{{ dic_result|safe}}');
+        var lat_list=dic_result['lat_list'];
+        var lon_list= dic_result['long_list'];
+        var label_list=dic_result['label_list'] ;
+        var label_list_1=dic_result['label_list_1'];
+        var label_list_overduedays=dic_result['label_list_overduedays'] ;
+        var label_list_max_overduedays=dic_result['label_list_max_overduedays'] ;
+        var label_status_list= dic_result['label_status_list'] ;
+
+      var mapData =
+                    { "lat_list":lat_list, "lon_list": lon_list, "label_list":label_list, "label_list_1": label_list_1,
+                        "label_list_overduedays": label_list_overduedays,"label_list_max_overduedays":label_list_max_overduedays,'label_status_list':label_status_list };
+     return mapData;
+            }
+         </script>

@@ -8,9 +8,9 @@ def get_map_data(str_date):
     import pandas as pd
 
 
-    neoj4_host = '*****'
-    username = '****'
-    password = '****'
+    neoj4_host = 'bolt://dataneo4j.xianghuanji.com:2021'
+    username = 'riskwrite'
+    password = 'dioqd11'
     driver = GraphDatabase.driver(neoj4_host, auth=(username, password))
 
     str_execute = '''
@@ -118,7 +118,7 @@ def df_dic_sta(dic_df):
         df_total=dic_df[label]
         str_status_3=str(','.join(df_total[df_total.status==3]['trade_no'].values))
         str_status_4 =str(','.join(df_total[df_total.status==4]['trade_no'].values))
-        str_status_5 = str(','.join(df_total[df_total.status==4]['trade_no'].values))
+        str_status_5 = str(','.join(df_total[df_total.status==5]['trade_no'].values))
 
 
         dic_result={}

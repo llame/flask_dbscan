@@ -98,4 +98,4 @@ def gps_label_map_load():
         return  render_template('gps_label_map.html',dic_result=dic_gps_label_map_result)
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1',port='5000')
+    app.run(host='0.0.0.0',port='5000')

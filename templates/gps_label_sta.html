@@ -1,74 +1,86 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Layui</title>
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
 </head>
 <body>
 
-<br><p>空间密度聚类结果查询</p><br>
-    <table>
-        <tr>
-            <td>
-    <form method="post" action="{{ url_for('gps_label_query') }}" >
-        查询时间
-        <input name="gps_label_time" value="{{ yesterday }}" type="text">
-        <button type="submit" value="">日期批量查询</button>
-    </form>
-            </td>
-             <td> &nbsp;&nbsp;&nbsp;</td>
-            <td>
-  <form method="post" action="{{ url_for('gps_label_detail_query') }}" >
-        查询详情
-        <input name="gps_label" value="" placeholder="输入label编号" type="text">
-        <button type="submit" value="">订单详情查询</button>
-    </form>
-            </td>
-                     <td>
-  <form method="post" action="{{ url_for('gps_label_map_load') }}" >
-        查看地图
-        <input name="gps_label_map" value="" placeholder="输入label编号" type="text">
-        <button type="submit" value="">地图加载</button>
-    </form>
-            </td>
-        </tr>
-    </table>
+<br>
+<p>空间密度聚类结果查询</p><br>
+<table>
+    <tr>
+        <td>
+            <form method="post" action="{{ url_for('gps_label_query') }}">
+                地址聚类查询时间
+                <input name="gps_label_time" value="{{ yesterday }}" type="text">
+                <button type="submit" value="">日期批量查询</button>
+            </form>
+        </td>
+        <td> &nbsp;&nbsp;&nbsp;</td>
+        <td>
+            <form method="post" action="{{ url_for('gps_label_detail_query') }}">
+                查询详情
+                <input name="gps_label" value="" placeholder="输入label编号" type="text">
+                <button type="submit" value="">订单详情查询</button>
+            </form>
+        </td>
+        <td>
+            <form method="post" action="{{ url_for('gps_label_map_load') }}">
+                查看地图
+                <input name="gps_label_map" value="" placeholder="输入label编号" type="text">
+                <button type="submit" value="">地图加载</button>
+            </form>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>
+            <form method="post" action="{{ url_for('neo4j_user_phone_query') }}">
+                关联数据查询时间
+                <input name="neo4j_query_label_time" value="{{ yesterday }}" type="text">
+                <button type="submit" value="">注册与联系人查询日期</button>
+            </form>
+        </td>
+    </tr>
+</table>
 <table class="layui-hide" id="demo"></table>
 
 <script src="../static/layui/layui.js" charset="utf-8"></script>
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    var data_2=JSON.parse('{{ data1|safe}}');
-layui.use('table', function(){
-  var table = layui.table;
-  table.render({
-    elem: '#demo'
-    ,cols: [[ //标题栏
-      {field: 'label', title: 'label', width: 80, sort: true}
-      ,{field: 'deal_order_number', title: '成交订单数', width: 130, sort: true}
-      ,{field: 'd7_order_number', title: 'DPD7+订单数', width: 150, sort: true}
-      ,{field: 'd30_order_number', title: 'DPD30+订单数', width: 150, sort: true}
-      ,{field: 'history_max_d30_order_number', title: '历史最大30+订单数', width: 180, sort: true}
-      ,{field: 'd7_ratio', title: 'DPD7_ratio', width: 130, sort: true}
-      ,{field: 'd30_ratio', title: 'DPD30_raito', width: 130, sort: true}
-      ,{field: 'history_max_d30_order_ratio', title: '历史最大30+_ratio', width: 180, sort: true}
-      ,{field: 'dfh_orders', title: '待发货订单', width: 150}
-      ,{field: 'jhz_orders', title: '拣货中订单', width: 120}
-      ,{field: 'yfh_orders', title: '已发货订单', width: 120}
-    ]]
-    ,data:data_2
-    ,skin: 'line' //表格风格
-    ,even: true
-    ,page: true //是否显示分页
-    //,limits: [5, 7, 10]
-    //,limit: 5 //每页默认显示的数量
-  });
-});
+    var data_2 = JSON.parse('{{ data1|safe}}');
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '#demo'
+            , cols: [[ //标题栏
+                {field: 'label', title: 'label', width: 80, sort: true}
+                , {field: 'deal_order_number', title: '成交订单数', width: 130, sort: true}
+                , {field: 'd7_order_number', title: 'DPD7+订单数', width: 150, sort: true}
+                , {field: 'd30_order_number', title: 'DPD30+订单数', width: 150, sort: true}
+                , {field: 'history_max_d30_order_number', title: '历史最大30+订单数', width: 180, sort: true}
+                , {field: 'd7_ratio', title: 'DPD7_ratio', width: 130, sort: true}
+                , {field: 'd30_ratio', title: 'DPD30_raito', width: 130, sort: true}
+                , {field: 'history_max_d30_order_ratio', title: '历史最大30+_ratio', width: 180, sort: true}
+                , {field: 'dfh_orders', title: '待发货订单', width: 150}
+                , {field: 'jhz_orders', title: '拣货中订单', width: 120}
+                , {field: 'yfh_orders', title: '已发货订单', width: 120}
+            ]]
+            , data: data_2
+            , skin: 'line' //表格风格
+            , even: true
+            , page: true //是否显示分页
+            //,limits: [5, 7, 10]
+            //,limit: 5 //每页默认显示的数量
+        });
+    });
 </script>
 
 </body>

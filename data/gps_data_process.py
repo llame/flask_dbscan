@@ -1,26 +1,20 @@
+import data.neo4j_data_explain as neo4j_data_explain
+import pandas as pd
+
+
 def get_map_data(str_date):
     '''
     查询某日所有聚集点数据
     :param str_date: 日期
     :return: 返回dic_df
     '''
-    from neo4j import GraphDatabase
-    import pandas as pd
-
-
-    neoj4_host = 'bolt://dataneo4j.xianghuanji.com:2021'
-    username = 'riskwrite'
-    password = 'dioqd11'
-    driver = GraphDatabase.driver(neoj4_host, auth=(username, password))
-
     str_execute = '''
     MATCH data=((n:order)-[:gps_stock_label]-(d:gps_label)-[:gps_stock_label]-(m:order))
     where  n.status in ['3','4','5','6','8','10','26','27','28','29','30','31'] and n.user_id<>m.user_id  and  n.trade_no =~ '.*{date}.*'
     RETURN data
     '''.format(date=str_date)
 
-    nodes = driver.session().run(str_execute).data()
-
+    nodes=neo4j_data_explain.get_neo4j_data_nodes(str_execute)
     # 获取不同label下的order node
     dic_label = {}
     for i in range(len(nodes)):

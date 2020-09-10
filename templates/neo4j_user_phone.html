@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>空间密度聚类查询</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<br><p>用户注册与紧急联系人关联-订单详情</p><br>
+
+<form method="get" action="{{ url_for('gps_label_query') }}" >
+        返回查询页
+        <button type="submit" value="">返回</button>
+</form>
+
+<table class="layui-hide" id="label_detail"></table>
+
+<script src="../static/layui/layui.js" charset="utf-8"></script>
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    var data_2=JSON.parse('{{ data1|safe}}');
+    var data_col=JSON.parse('{{ data_col|safe }}')
+layui.use('table', function(){
+  var table = layui.table;
+  //展示已知数据
+
+    table.render({
+    elem: '#label_detail'
+    ,cols: [data_col]
+    ,data:data_2
+    ,skin: 'line' //表格风格
+    ,even: true
+    ,page: true //是否显示分页
+    //,limits: [5, 7, 10]
+    //,limit: 5 //每页默认显示的数量
+  });
+});
+</script>
+
+</body>
+</html>

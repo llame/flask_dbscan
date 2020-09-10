@@ -3,7 +3,8 @@ from flask import request
 from flask import render_template
 from flask import session
 import data.gps_data_process as gps_data_process
-
+import data.neo4j_data_explain as neo4j_data_explain
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '123456'
@@ -13,8 +14,6 @@ app.config['SECRET_KEY'] = '123456'
 def initl():
     if request.method=='GET':
         return render_template('gps_label_sta.html')
-
-
 
 @app.route('/gps_label_query/',methods=['GET','POST'])
 def gps_label_query():
@@ -31,6 +30,7 @@ def gps_label_query():
         else:
             return render_template('gps_label_sta.html', yesterday=session.get('date'))
     else:
+        print('hello')
         session.clear()
         date=request.form.get('gps_label_time')
         print('datetime:'+str(date))
@@ -65,7 +65,6 @@ def gps_label_detail_query():
     if request.method=='GET':
         return render_template('gps_label_sta.html')
     else:
-
         import json
         label=str(request.form.get('gps_label'))
         date=session.get('date')
@@ -78,12 +77,12 @@ def gps_label_detail_query():
 
     return  render_template('gps_label_detail.html',data1=dic_detail_list)
 
+
 @app.route('/gps_label_map_load/',methods=['GET','POST'])
 def gps_label_map_load():
     if request.method=='GET':
         return render_template('gps_label_sta.html')
     else:
-        import json
         label = str(request.form.get('gps_label_map'))
         date=request.form.get('date')
         if((date=='') or (date is None)):
@@ -97,5 +96,39 @@ def gps_label_map_load():
 
         return  render_template('gps_label_map.html',dic_result=dic_gps_label_map_result)
 
+
+@app.route('/neo4j_user_phone_query/',methods=['GET','POST'])
+def neo4j_user_phone_query():
+    '''
+    用户紧急联系人与注册号码关联关系查询
+    :return:
+    '''
+    if request.method=='GET':
+        return render_template('gps_label_sta.html')
+    else:
+        import json
+        date = request.form.get('neo4j_query_label_time')
+        df_temp = neo4j_data_explain.get_user_phone_total_community_city(date)
+
+
+        dic_detail_list = [dict(row) for index, row in df_temp.iterrows()]
+        dic_detail_list = json.dumps(dic_detail_list)
+        print(str(dic_detail_list))
+
+        #cols 数据生成
+        import pandas as pd
+        df_columns = pd.DataFrame(df_temp.columns)
+        df_columns.columns = ['field']
+        df_columns['title']=df_columns.field
+        #df_columns.loc[df_columns.field=='community_no','title']='团体编号'
+        df_columns['sort']=True
+
+        dic_col_list = [dict(row) for index, row in df_columns.iterrows()]
+        dic_col_list = json.dumps(dic_col_list)
+        print(str(dic_col_list))
+
+    return render_template('neo4j_user_phone.html', data1=dic_detail_list,data_col=dic_col_list)
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port='5000')
+    app.run(host='0.0.0.0',port='5006',debug=True)

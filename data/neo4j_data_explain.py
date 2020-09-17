@@ -7,7 +7,7 @@ def get_neo4j_data_nodes(str_cypher):
     '''
     from neo4j import GraphDatabase
 
-    neoj4_host = 'bolt://dataneo4j.xianghuanji.com:2021'
+    neoj4_host = 'bolt://'
     username = 'riskwrite'
     password = 'dioqd11'
     driver = GraphDatabase.driver(neoj4_host, auth=(username, password))

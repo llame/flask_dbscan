@@ -381,7 +381,8 @@ def get_device_community(str_date):
        'stock_phone', 'risk_user_id', 'user_id', 'name',   'keys_value'])
 
     columns_list=['community_no','trade_no','status','comment','overdue_days','max_overduedays', 'user_name','user_id','keys_value']
-    columns_list_left=columns_list  and list(df_community_total.columns)
+    columns_list_left=set(list(df_community_total.columns)) & set(list(columns_list))
+    columns_list_left=list(columns_list_left)
     columns_list_left.sort()
 
     df_community_total=df_community_total[columns_list_left]

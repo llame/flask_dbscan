@@ -13,7 +13,10 @@ app.config['SECRET_KEY'] = '123456'
 @app.route('/')
 def initl():
     if request.method=='GET':
-        return render_template('gps_label_sta.html')
+        from datetime import datetime,timedelta
+        yesterday=datetime.now()+timedelta(days=-1)
+        yesterday=yesterday.strftime(format('%Y%m%d'))
+        return render_template('gps_label_sta.html',yesterday=yesterday)
 
 @app.route('/gps_label_query/',methods=['GET','POST'])
 def gps_label_query():
@@ -22,13 +25,10 @@ def gps_label_query():
     :return:
     '''
     if request.method=='GET':
-        if('2' not in str(session.get('date'))):
-            from datetime import datetime,timedelta
-            yesterday=datetime.now()+timedelta(days=-1)
-            yesterday=yesterday.strftime(format('%Y%m%d'))
-            return render_template('gps_label_sta.html',yesterday=yesterday)
-        else:
-            return render_template('gps_label_sta.html', yesterday=session.get('date'))
+        from datetime import datetime,timedelta
+        yesterday=datetime.now()+timedelta(days=-1)
+        yesterday=yesterday.strftime(format('%Y%m%d'))
+        return render_template('gps_label_sta.html',yesterday=yesterday)
     else:
         print('hello')
         session.clear()
@@ -129,6 +129,103 @@ def neo4j_user_phone_query():
 
     return render_template('neo4j_user_phone.html', data1=dic_detail_list,data_col=dic_col_list)
 
+
+@app.route('/neo4j_stock_user_phone_query/',methods=['GET','POST'])
+def neo4j_stock_user_phone_query():
+    '''
+    用户发货号码与紧急联系人或者注册手机号码关联关系查询
+    :return:
+    '''
+    if request.method=='GET':
+        return render_template('gps_label_sta.html')
+    else:
+        import json
+        date = request.form.get('neo4j_query_label_time_stock_user_phone_query_time')
+        df_temp = neo4j_data_explain.get_stock_phone_with_reg_or_emergency_community(date)
+
+
+        dic_detail_list = [dict(row) for index, row in df_temp.iterrows()]
+        dic_detail_list = json.dumps(dic_detail_list)
+        print(str(dic_detail_list))
+
+        #cols 数据生成
+        import pandas as pd
+        df_columns = pd.DataFrame(df_temp.columns)
+        df_columns.columns = ['field']
+        df_columns['title']=df_columns.field
+        #df_columns.loc[df_columns.field=='community_no','title']='团体编号'
+        df_columns['sort']=True
+
+        dic_col_list = [dict(row) for index, row in df_columns.iterrows()]
+        dic_col_list = json.dumps(dic_col_list)
+        print(str(dic_col_list))
+
+    return render_template('neo4j_user_phone.html', data1=dic_detail_list,data_col=dic_col_list)
+
+
+@app.route('/neo4j_stock_phone_query/',methods=['GET','POST'])
+def neo4j_stock_phone_query():
+    '''
+    用户发货号码关联关系查询
+    :return:
+    '''
+    if request.method=='GET':
+        return render_template('gps_label_sta.html')
+    else:
+        import json
+        date = request.form.get('neo4j_query_stock_phone_time')
+        df_temp = neo4j_data_explain.get_stock_phone_with_stock_phone_community(date)
+
+
+        dic_detail_list = [dict(row) for index, row in df_temp.iterrows()]
+        dic_detail_list = json.dumps(dic_detail_list)
+        print(str(dic_detail_list))
+
+        #cols 数据生成
+        import pandas as pd
+        df_columns = pd.DataFrame(df_temp.columns)
+        df_columns.columns = ['field']
+        df_columns['title']=df_columns.field
+        #df_columns.loc[df_columns.field=='community_no','title']='团体编号'
+        df_columns['sort']=True
+
+        dic_col_list = [dict(row) for index, row in df_columns.iterrows()]
+        dic_col_list = json.dumps(dic_col_list)
+        print(str(dic_col_list))
+
+    return render_template('neo4j_user_phone.html', data1=dic_detail_list,data_col=dic_col_list)
+
+@app.route('/neo4j_device_id_query/',methods=['GET','POST'])
+def neo4j_device_id_query():
+    '''
+    用户设备id网络查询
+    :return:
+    '''
+    if request.method=='GET':
+        return render_template('gps_label_sta.html')
+    else:
+        import json
+        date = request.form.get('neo4j_query_device_id_time')
+        df_temp = neo4j_data_explain.get_device_community(date)
+
+
+        dic_detail_list = [dict(row) for index, row in df_temp.iterrows()]
+        dic_detail_list = json.dumps(dic_detail_list)
+        print(str(dic_detail_list))
+
+        #cols 数据生成
+        import pandas as pd
+        df_columns = pd.DataFrame(df_temp.columns)
+        df_columns.columns = ['field']
+        df_columns['title']=df_columns.field
+        #df_columns.loc[df_columns.field=='community_no','title']='团体编号'
+        df_columns['sort']=True
+
+        dic_col_list = [dict(row) for index, row in df_columns.iterrows()]
+        dic_col_list = json.dumps(dic_col_list)
+        print(str(dic_col_list))
+
+    return render_template('neo4j_user_phone.html', data1=dic_detail_list,data_col=dic_col_list)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port='5006',debug=True)

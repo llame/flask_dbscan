@@ -1,5 +1,6 @@
 altgraph==0.17
 click==7.1.2
+decorator==4.4.2
 et-xmlfile==1.0.1
 Flask==1.1.2
 future==0.18.2
@@ -8,6 +9,7 @@ jdcal==1.4.1
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 neo4j==4.0.2
+networkx==2.5
 numpy==1.19.1
 openpyxl==3.0.4
 packaging==20.4
@@ -17,9 +19,10 @@ pyparsing==2.4.7
 python-dateutil==2.8.1
 python-dotenv==0.14.0
 pytz==2020.1
-pywin32==228
 pywin32-ctypes==0.2.0
+scipy==1.5.2
 sip==5.3.0
 six==1.15.0
 toml==0.10.1
 Werkzeug==1.0.1
+xgboost==1.2.0

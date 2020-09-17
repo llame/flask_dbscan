@@ -18,7 +18,7 @@ def get_map_data(str_date):
     # 获取不同label下的order node
     dic_label = {}
     for i in range(len(nodes)):
-        print(nodes[i]['data'][2].get('stock_gps_label'))
+        #print(nodes[i]['data'][2].get('stock_gps_label'))
         label = nodes[i]['data'][2].get('stock_gps_label')
         if label in dic_label.keys():
             dic_label[label].append(nodes[i]['data'][0])
@@ -147,7 +147,7 @@ def df_dic_sta(dic_df):
 
     for i in dic_df.keys():
         label = i
-        print('label:'+label)
+        #print('label:'+label)
         dic_result =sta_cal(dic_df,label)
         label_list.append(label)
         total_number_list.append(dic_result['total_number'])

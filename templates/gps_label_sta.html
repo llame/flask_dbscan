@@ -11,7 +11,7 @@
 <body>
 
 <br>
-<p>空间密度聚类结果查询</p><br>
+<p>T+1数据查询</p><br>
 <table>
     <tr>
         <td>
@@ -44,7 +44,37 @@
             <form method="post" action="{{ url_for('neo4j_user_phone_query') }}">
                 关联数据查询时间
                 <input name="neo4j_query_label_time" value="{{ yesterday }}" type="text">
-                <button type="submit" value="">注册与联系人查询日期</button>
+                <button type="submit" value="">注册与联系人查询网络查询</button>
+            </form>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <form method="post" action="{{ url_for('neo4j_stock_user_phone_query') }}">
+                关联数据查询时间
+                <input name="neo4j_query_label_time_stock_user_phone_query_time" value="{{ yesterday }}" type="text">
+                <button type="submit" value="">发货电话与注册和联系人网络查询</button>
+            </form>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <form method="post" action="{{ url_for('neo4j_stock_phone_query') }}">
+                关联数据查询时间
+                <input name="neo4j_query_stock_phone_time" value="{{ yesterday }}" type="text">
+                <button type="submit" value="">发货电话网络查询</button>
+            </form>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <form method="post" action="{{ url_for('neo4j_device_id_query') }}">
+                关联数据查询时间
+                <input name="neo4j_query_device_id_time" value="{{ yesterday }}" type="text">
+                <button type="submit" value="">设备device_id查询</button>
             </form>
         </td>
     </tr>
